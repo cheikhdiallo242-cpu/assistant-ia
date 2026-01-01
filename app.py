@@ -1,8 +1,8 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import os
 from openai import OpenAI
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="modèles")
 
 client = OpenAI(
     api_key=os.environ.get("OPENAI_API_KEY")
@@ -10,7 +10,7 @@ client = OpenAI(
 
 @app.route("/")
 def home():
-    return "Assistant IA actif 🚀"
+    return render_template("index.html")
 
 @app.route("/chat", methods=["POST"])
 def chat():
