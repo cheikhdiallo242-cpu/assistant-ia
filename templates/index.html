@@ -57,28 +57,33 @@
 
   <script>
     const input = document.getElementById("input");
-    const messages = document.getElementById("messages");
+  const messages = document.getElementById("messages");
 
-    input.addEventListener("keydown", async (e) => {
-      if (e.key === "Enter" && input.value.trim() !== "") {
-        const text = input.value;
+  input.addEventListener("keydown", async (e) => {
+    if (e.key === "Enter" && input.value.trim() !== "") {
+      const text = input.value;
 
-        messages.innerHTML += `<div class="user">👤 ${text}</div>`;
-        input.value = "";
+      // Message utilisateur
+      messages.innerHTML += `<div class="user">👤 ${text}</div>`;
+      input.value = "";
 
-        try {
-          const res = await fetch("/chat", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ message: text })
-          });
+      try {
+        const res = await fetch("/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ message: text })
+        });
 
-          const data = await res.json();
-          messages.innerHTML += `<div class="bot">🤖 ${data.reply}</div>`;
-          messages.scrollTop = messages.scrollHeight;
+        const data = await res.json();
 
-        } catch (err) {
-          messages.innerHTML += `<div class="bot">❌ Erreur serveur</div>`;
+        // ✅ Message IA
+        messages.innerHTML += `<div class="bot">🤖 ${data.reply}</div>`;
+        messages.scrollTop = messages.scrollHeight;
+
+      } catch (err) {
+        messages.innerHTML += `<div class="bot">❌ Erreur serveur</div>`;
         }
       }
     });
