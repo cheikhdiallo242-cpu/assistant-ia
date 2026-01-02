@@ -14,22 +14,24 @@ def home():
 
 @app.route("/chat", methods=["POST"])
 def chat():
-    user_message = request.json.get("message")
+    data = request.get_json()
+    user_message = data.get("message")
 
     if not user_message:
         return jsonify({"error": "Message manquant"}), 400
 
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[
-            {"role": "system", "content": "Tu es un assistant IA utile."},
-            {"role": "user", "content": user_message}
-        ]
-    )
+    try:
+        response = client.responses.create(
+            model="gpt-4.1-mini",
+            input=user_message
+        )
 
-    return jsonify({
-        "reply": response.choices[0].message.content
-    })
+        reply = response.output_text
+        return jsonify({"reply": reply})
+
+    except Exception as e:
+        print(e)
+        return jsonify({"error": "Erreur serveur"}), 500
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 10000)))
