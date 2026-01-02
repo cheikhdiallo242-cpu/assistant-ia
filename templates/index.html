@@ -46,7 +46,7 @@
 const input = document.getElementById("input");
 const messages = document.getElementById("messages");
 
-input.addEventListener("keypress", async (e) => {
+input.addEventListener("keydown", async (e) => {
   if (e.key === "Enter") {
     const text = input.value;
     messages.innerHTML += `<div class="user">🧑 ${text}</div>`;
