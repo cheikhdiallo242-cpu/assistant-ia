@@ -51,13 +51,15 @@ function send() {
 
   // ===== AIDE =====
   else if (
-    text.includes("aide") ||
-    text.includes("aider") ||
-    text.includes("help")
-  ) {
-    reply =
-      "🧠 Je peux t’aider pour :\n- écrire du rap\n- améliorer ton wolof\n- créer des idées\nDis-moi ce que tu veux.";
-  }
+  text.includes("aide") ||
+  text.includes("aider") ||
+  text.includes("help") ||
+  text.includes("ok") ||
+  text === "ok"
+) {
+  reply =
+    "🧠 Dis-moi clairement ce que tu veux :\n- texte rap\n- wolof\n- idée\n- motivation";
+}
 
   // ===== INCONNU =====
   else {
