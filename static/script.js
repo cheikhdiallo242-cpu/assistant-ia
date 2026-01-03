@@ -134,11 +134,26 @@ function send() {
       : random(rapFrancais);
   }
 
-  else if (text.includes("encore") || text.includes("continue")) {
-    if (memory.style === "freestyle") reply = random(freestyleMix);
-    else if (memory.language === "wolof") reply = random(rapWolof);
-    else reply = random(rapFrancais);
+  else if (
+  text.includes("encore") ||
+  text.includes("continue") ||
+  text.includes("un autre") ||
+  text.includes("vas-y") ||
+  text.includes("donne")
+) {
+  if (memory.style === "freestyle") {
+    reply = random(freestyleMix);
+  } 
+  else if (memory.language === "wolof") {
+    reply = random(rapWolof);
+  } 
+  else if (memory.language === "français") {
+    reply = random(rapFrancais);
+  } 
+  else {
+    reply = "🎤 Dis-moi : rap wolof, rap français ou freestyle.";
   }
+}
 
   else if (text.includes("rap")) {
     reply = "🎤 Tu veux en wolof ou en français ?";
