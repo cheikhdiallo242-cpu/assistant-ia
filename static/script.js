@@ -1,32 +1,30 @@
-// ===== MÉMOIRE SIMPLE =====
-let lastLanguage = null;
-let lastStyle = null;
+let memory = {
+  language: null,
+  style: null
+};
 
-// ===== BASE DE TEXTES =====
 const rapWolof = [
-  "🎤 Dundu bi metti na, waaye dama dox ci dëgg,\nSama xel dafay leer, dùgguma ci fen.",
-  "🎤 Wolof laa def arme, xam-xam laa def doole,\nKu xamul boppam, rap bi du ko sol.",
-  "🎤 Ñu bare di wax, waaye jëf mooy solo,\nRap conscient, du fecc, du yëngu solo."
+  "🎤 Dëgg laa wax, du fen, sama xel leer na.\nRap bi mooy yoon, ba ma dee.",
+  "🎤 Dundu bi metti, waaye dama jog ci kow.\nWolof bi mooy sama arme.",
+  "🎤 Ku xam boppam du ragal,\nRap conscient mooy sama signal."
 ];
 
 const rapFrancais = [
-  "🎤 J’écris pour survivre, pas pour plaire au système,\nMa plume est honnête, même quand le monde saigne.",
-  "🎤 Pas besoin d’or pour briller, j’ai la parole et la dalle,\nChaque phrase est un combat, chaque rime une rafale.",
-  "🎤 J’rappe pour ceux qu’on n’écoute pas,\nLa vérité dérange, mais moi je l’écris là."
+  "🎤 J’écris ce que je vis, pas ce qu’ils veulent entendre.\nMa plume est libre.",
+  "🎤 Le rap m’a sauvé quand le monde m’a lâché.",
+  "🎤 Pas besoin d’or pour briller,\nJ’ai la parole et la vérité."
 ];
 
 const freestyleMix = [
-  "🎤 Xel bu leer dans un monde flou,\nJe rappe en wolof, en français, toujours debout.",
-  "🎤 Dakar dans le cœur, micro dans la main,\nRap bi mooy yoon, même quand demain est incertain.",
-  "🎤 Même sans scène, je freestyle la vérité,\nRap bi du jeu, c’est une nécessité."
+  "🎤 Wolof dans la tête, français dans la voix,\nJe freestyle ma vie, je triche pas.",
+  "🎤 Même sans scène je rappe debout,\nLa vérité sort brute.",
+  "🎤 Rap bi mooy dund,\nMicro mooy sama doom."
 ];
 
-// ===== OUTIL RANDOM =====
-function randomFrom(array) {
-  return array[Math.floor(Math.random() * array.length)];
+function random(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
 }
 
-// ===== FONCTION PRINCIPALE =====
 function send() {
   const input = document.getElementById("input");
   const messages = document.getElementById("messages");
@@ -35,63 +33,83 @@ function send() {
   if (!userText) return;
 
   const text = userText.toLowerCase();
-
-  messages.innerHTML += `<div class="user">👤 ${userText}</div>`;
   input.value = "";
 
-  let reply = "🤖 Je n’ai pas compris. Tu veux : rap, freestyle, wolof ou français ?";
+  messages.innerHTML += `<div class="user">👤 ${userText}</div>`;
 
-  // ===== SALUTATIONS =====
-  if (text.includes("salut") || text.includes("slt") || text.includes("bonjour")) {
-    reply = "👋 Salut Cheikh. Tu veux un texte rap, freestyle ou conscient ?";
+  let reply = "🤖 Dis-moi ce que tu veux : rap, wolof, freestyle ou aide.";
+
+  // 👋 SALUTATIONS
+  if (
+    text.includes("salut") ||
+    text.includes("bonjour") ||
+    text.includes("slt")
+  ) {
+    reply = "👋 Salut Cheikh. Tu veux du rap, du wolof ou un freestyle ?";
   }
 
-  // ===== COMPLIMENTS =====
-  else if (text.includes("nice") || text.includes("bien") || text.includes("ok")) {
-    reply = "🙏 Merci. Tu veux encore un autre ?";
+  // 🧠 QUI ES-TU
+  else if (
+    text.includes("qui es tu") ||
+    text.includes("tu es qui") ||
+    text.includes("c'est qui") ||
+    text.includes("t'es qui")
+  ) {
+    reply = "🤖 Je suis ton assistant rap personnel. Je t’aide à écrire, freestyle et améliorer ton wolof.";
   }
 
-  // ===== LANGUES =====
+  // 🤝 AIDE
+  else if (
+    text.includes("aide") ||
+    text.includes("aider") ||
+    text.includes("m'aider") ||
+    text.includes("me aider")
+  ) {
+    reply = "🧠 Je peux écrire du rap, freestyle, wolof ou français. Dis juste ce que tu veux.";
+  }
+
+  // 🌍 LANGUES
   else if (text.includes("wolof")) {
-    lastLanguage = "wolof";
+    memory.language = "wolof";
     reply = "🗣️ Wolof noté. Tu veux conscient ou freestyle ?";
   }
 
   else if (text.includes("français")) {
-    lastLanguage = "français";
+    memory.language = "français";
     reply = "🇫🇷 Français noté. Conscient ou freestyle ?";
   }
 
-  // ===== STYLES =====
+  // 🎤 STYLES
   else if (text.includes("conscient")) {
-    lastStyle = "conscient";
-
-    if (lastLanguage === "wolof") {
-      reply = randomFrom(rapWolof);
-    } else {
-      reply = randomFrom(rapFrancais);
-    }
+    memory.style = "conscient";
+    reply = memory.language === "wolof"
+      ? random(rapWolof)
+      : random(rapFrancais);
   }
 
   else if (text.includes("freestyle")) {
-    lastStyle = "freestyle";
-    reply = randomFrom(freestyleMix);
+    memory.style = "freestyle";
+    reply = random(freestyleMix);
   }
 
-  // ===== DEMANDE GÉNÉRALE RAP =====
-  else if (text.includes("rap") || text.includes("texte")) {
-    reply = "🎤 Tu veux en wolof ou en français ?";
-  }
-
-  // ===== ENCORE / AUTRE =====
-  else if (text.includes("encore") || text.includes("autre")) {
-    if (lastStyle === "freestyle") {
-      reply = randomFrom(freestyleMix);
-    } else if (lastLanguage === "wolof") {
-      reply = randomFrom(rapWolof);
+  // 🔁 ENCORE
+  else if (
+    text.includes("encore") ||
+    text.includes("autre") ||
+    text.includes("continue")
+  ) {
+    if (memory.style === "freestyle") {
+      reply = random(freestyleMix);
+    } else if (memory.language === "wolof") {
+      reply = random(rapWolof);
     } else {
-      reply = randomFrom(rapFrancais);
+      reply = random(rapFrancais);
     }
+  }
+
+  // 🎶 RAP GÉNÉRAL
+  else if (text.includes("rap")) {
+    reply = "🎤 Tu veux en wolof ou en français ?";
   }
 
   messages.innerHTML += `<div class="bot">${reply}</div>`;
