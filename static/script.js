@@ -2,74 +2,46 @@ function send() {
   const input = document.getElementById("input");
   const messages = document.getElementById("messages");
 
-  let text = input.value.trim().toLowerCase();
-  if (text === "") return;
+  const userText = input.value.trim();
+  if (!userText) return;
 
-  // Message utilisateur
-  messages.innerHTML += `<div class="user">👤 ${input.value}</div>`;
+  const text = userText.toLowerCase();
+
+  messages.innerHTML += `<div class="user">👤 ${userText}</div>`;
   input.value = "";
 
-  let reply = "";
+  let reply = "🤖 Je réfléchis... reformule ta question.";
 
-  // ===== SALUTATIONS =====
-  if (
-    text.includes("salut") ||
-    text.includes("bonjour") ||
-    text.includes("salam")
-  ) {
-    reply = "👋 Salut Cheikh, je suis là. Tu veux parler rap, wolof ou projets ?";
+  // ====== BASE DE TEXTES RAP ======
+  const rapTexts = [
+    "🎤 Je rappe pour sortir du noir, xel bu leer, cœur solide dans le brouillard.",
+    "🎤 Micro en main, vérité dans la voix, dakar la nuit, je parle pour les miens.",
+    "🎤 Pas besoin d’or pour briller, j’ai la parole et la dalle.",
+    "🎤 Wolof dans la tête, le rap dans les veines, je trace ma route sans haine.",
+    "🎤 Ils parlent trop, moi j’écris vrai, vécu gravé, flow affûté."
+  ];
+
+  // ====== RÉPONSES CONDITIONNELLES ======
+  if (text.includes("salut") || text.includes("bonjour")) {
+    reply = "👋 Salut Cheikh, comment je peux t’aider ?";
   }
-
-  // ===== IDENTITÉ =====
-  else if (
-    text.includes("qui es tu") ||
-    text.includes("c'est qui") ||
-    text.includes("tu es quoi")
-  ) {
-    reply = "🤖 Je suis ton assistant personnel, créé par Cheikh Diallo.";
+  else if (text.includes("qui es tu")) {
+    reply = "🤖 Je suis ton assistant personnel, créé par Cheikh.";
   }
-
-  // ===== RAP =====
+  else if (text.includes("wolof")) {
+    reply = "🗣️ Wolof bi mooy racine bi. Wax ak xel, wax ak doole.";
+  }
   else if (
     text.includes("rap") ||
-    text.includes("rapper") ||
-    text.includes("texte")
+    text.includes("texte") ||
+    text.includes("freestyle")
   ) {
-    reply =
-      "🎤 Le rap c’est la vérité.\nÉcris ce que tu vis.\nVeux-tu un texte rap en wolof ou en français ?";
+    const randomIndex = Math.floor(Math.random() * rapTexts.length);
+    reply = rapTexts[randomIndex];
+  }
+  else if (text.includes("aide")) {
+    reply = "🧠 Je peux t’aider à écrire du rap, améliorer ton wolof et créer des idées.";
   }
 
-  // ===== WOLOF =====
-  else if (
-    text.includes("wolof") ||
-    text.includes("wollof") ||
-    text.includes("langue")
-  ) {
-    reply =
-      "🗣️ Wolof bi mooy sunu racine.\nWax ak xel, wax ak doole.\nTu veux un texte street ou conscient ?";
-  }
-
-  // ===== AIDE =====
-  else if (
-  text.includes("aide") ||
-  text.includes("aider") ||
-  text.includes("help") ||
-  text.includes("ok") ||
-  text === "ok"
-) {
-  reply =
-    "🧠 Dis-moi clairement ce que tu veux :\n- texte rap\n- wolof\n- idée\n- motivation";
-}
-
-  // ===== INCONNU =====
-  else {
-    reply =
-      "🤔 Je n’ai pas encore compris.\nEssaie : rap, wolof, aide, salut.";
-  }
-
-  // Message bot
-  messages.innerHTML += `<div class="bot">🤖 ${reply}</div>`;
-
-  // Scroll automatique
-  messages.scrollTop = messages.scrollHeight;
+  messages.innerHTML += `<div class="bot">${reply}</div>`;
 }
