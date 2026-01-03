@@ -1,5 +1,4 @@
-let memory = {
-  language: null,
+let memory = {  language: null,
   style: null
 };
 
