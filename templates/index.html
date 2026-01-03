@@ -3,90 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <title>Assistant IA</title>
-  <style>
-    body {
-      background: #0f172a;
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      color: white;
-    }
-
-    .chat-box {
-      background: #020617;
-      width: 350px;
-      padding: 15px;
-      border-radius: 10px;
-    }
-
-    .messages {
-      height: 300px;
-      overflow-y: auto;
-      margin-bottom: 10px;
-    }
-
-    .user {
-      color: #38bdf8;
-      margin: 5px 0;
-    }
-
-    .bot {
-      color: #a7f3d0;
-      margin: 5px 0;
-    }
-
-    input {
-      width: 100%;
-      padding: 10px;
-      border-radius: 5px;
-      border: none;
-    }
-  </style>
 </head>
-
 <body>
-  <div class="chat-box">
-    <h3>🤖 Assistant IA</h3>
 
-    <div class="messages" id="messages"></div>
+<h2>🤖 Assistant IA</h2>
 
-    <input id="input" placeholder="Écris ton message et appuie sur Entrée">
-  </div>
+<div id="messages"></div>
 
-  <script>
-    const input = document.getElementById("input");
-  const messages = document.getElementById("messages");
+<input id="input" placeholder="Écris ton message">
+<button onclick="send()">Envoyer</button>
 
-  input.addEventListener("keydown", async (e) => {
-    if (e.key === "Enter" && input.value.trim() !== "") {
-      const text = input.value;
+<script src="/static/script.js"></script>
 
-      // Message utilisateur
-      messages.innerHTML += `<div class="user">👤 ${text}</div>`;
-      input.value = "";
-
-      try {
-        const res = await fetch("/chat", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ message: text })
-        });
-
-        const data = await res.json();
-
-        messages.innerHTML += `<div class="bot">🤖 ${data.reply}</div>`;
-     
-        messages.scrollTop = messages.scrollHeight;
-
-      } catch (err) {
-        messages.innerHTML += `<div class="bot">❌ Erreur serveur</div>`;
-        }
-      }
-    });
-  </script>
 </body>
 </html>
