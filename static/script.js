@@ -10,37 +10,37 @@ function send() {
   messages.innerHTML += `<div class="user">👤 ${userText}</div>`;
   input.value = "";
 
-  let reply = "🤖 Je réfléchis... reformule ta question.";
+  let reply = "🤖 Je n’ai pas encore compris. Essaie : rap, wolof, aide, salut.";
 
-  // ====== BASE DE TEXTES RAP ======
-  const rapTexts = [
-    "🎤 Je rappe pour sortir du noir, xel bu leer, cœur solide dans le brouillard.",
-    "🎤 Micro en main, vérité dans la voix, dakar la nuit, je parle pour les miens.",
-    "🎤 Pas besoin d’or pour briller, j’ai la parole et la dalle.",
-    "🎤 Wolof dans la tête, le rap dans les veines, je trace ma route sans haine.",
-    "🎤 Ils parlent trop, moi j’écris vrai, vécu gravé, flow affûté."
+  // ===== TEXTES RAP CONSCIENT WOOLOF =====
+  const rapConscientWolof = [
+    "🎤 Dundu bi jafe na, waaye dama jog, xel bu leer, sama yoon du ñàkk.\nÑu bare wax, waaye jëf mooy am solo,\nRap bi di xam-xam, du fecc, du dolo.",
+    
+    "🎤 Ma wax li ma gis, li ma dundu,\nDakar la ma jogé, sama xel du gëna gundu.\nRap conscient, wax dëgg, wax jàmm,\nKu am xel du jaay boppam ngir xaalis.",
+    
+    "🎤 Wolof laa def arme, xam-xam laa def bouclier,\nRap bi di école, du distraction, du piège.\nDama wër àddina, waaye dama fi taxaw,\nSama wax mooy fitna ci ku bëgg a daw."
   ];
 
-  // ====== RÉPONSES CONDITIONNELLES ======
+  // ===== LOGIQUE =====
   if (text.includes("salut") || text.includes("bonjour")) {
-    reply = "👋 Salut Cheikh, comment je peux t’aider ?";
+    reply = "👋 Salut Cheikh, je suis là. Rap, wolof ou projets ?";
   }
-  else if (text.includes("qui es tu")) {
-    reply = "🤖 Je suis ton assistant personnel, créé par Cheikh.";
-  }
-  else if (text.includes("wolof")) {
-    reply = "🗣️ Wolof bi mooy racine bi. Wax ak xel, wax ak doole.";
-  }
-  else if (
-    text.includes("rap") ||
-    text.includes("texte") ||
-    text.includes("freestyle")
-  ) {
-    const randomIndex = Math.floor(Math.random() * rapTexts.length);
-    reply = rapTexts[randomIndex];
-  }
+
   else if (text.includes("aide")) {
-    reply = "🧠 Je peux t’aider à écrire du rap, améliorer ton wolof et créer des idées.";
+    reply = "🧠 Je peux écrire du rap, améliorer ton wolof et créer des idées.";
+  }
+
+  else if (text.includes("rap") && text.includes("wolof") && text.includes("conscient")) {
+    const i = Math.floor(Math.random() * rapConscientWolof.length);
+    reply = rapConscientWolof[i];
+  }
+
+  else if (text.includes("rap") || text.includes("texte")) {
+    reply = "🎤 Tu veux un texte en wolof ou en français ?";
+  }
+
+  else if (text.includes("wolof")) {
+    reply = "🗣️ Tu veux un texte street ou conscient ?";
   }
 
   messages.innerHTML += `<div class="bot">${reply}</div>`;
