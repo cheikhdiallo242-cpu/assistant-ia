@@ -54,7 +54,7 @@ def think(user, message):
 
     # Salutation
     if "salut" in msg or "bonjour" in msg:
-        return "👋 Salut Cheikh. Tu veux du rap en wolof ou en français ?"
+        return "👋 Salut Cheikh chérie sandu. Tu veux du rap en wolof ou en français ?"
 
     # Langue
     if "wolof" in msg:
