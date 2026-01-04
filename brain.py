@@ -76,7 +76,19 @@ def think(user, message):
 
     return "Dis-moi : wolof ou français."
 
-def generate_rap(user):
+def generate_response(history):
+    last_message = history[-1]["content"].lower()
+
+    if "rap" in last_message or "texte" in last_message:
+        return "🎤 Je peux t’aider à écrire un texte de rap. Dis-moi le thème."
+
+    if "bonjour" in last_message or "salut" in last_message:
+        return "Salut 👊 prêt à rapper ou à écrire ?"
+
+    if "wolof" in last_message:
+        return "D'accord. On continue en wolof 💪"
+
+    return "Parle-moi. Je t’écoute."
     lang = memory[user]["lang"]
     style = memory[user]["style"]
 
