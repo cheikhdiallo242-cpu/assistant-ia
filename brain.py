@@ -93,3 +93,15 @@ def generate_rap(user):
         return random.choice(fr_freestyle)
 
     return "On continue. Encore ?"
+    RAP_TEXTS = [
+    "Je viens de loin, la rue m’a forgé",
+    "Micro dans la main, vérité dans le cœur",
+    "Ils parlent trop, moi j’écris",
+    "Chaque ligne est une cicatrice",
+    "J’ai connu la faim avant la gloire",
+    "Ma voix est une arme pacifique",
+    "Le rap c’est pas du bruit, c’est un message",
+    "J’écris pour survivre",
+    "La nuit m’a appris à penser",
+    "Je rappe pour ceux qu’on n’écoute pas"
+]
