@@ -1,12 +1,7 @@
 from flask import Flask, request, jsonify, render_template
-import os
-from openai import OpenAI
+from brain import think
 
 app = Flask(__name__)
-
-client = OpenAI(
-    api_key=os.environ.get("OPENAI_API_KEY")
-)
 
 @app.route("/")
 def home():
