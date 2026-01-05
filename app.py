@@ -16,7 +16,8 @@ def chat():
     if not user_message:
         return jsonify({"response": "Écris un message."})
 
-    response = think(user_id, user_message)
+    # 👉 ICI la correction
+    response = generate_response(user_id, user_message)
 
     return jsonify({"response": response})
 
