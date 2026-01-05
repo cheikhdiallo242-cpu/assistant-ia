@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, render_template
-from brain import generate_response
+from brain import think   # ✅ ON IMPORTE think
 
 app = Flask(__name__)
 
@@ -16,11 +16,9 @@ def chat():
     if not user_message:
         return jsonify({"response": "Écris un message."})
 
-    # 👉 ICI la correction
-    response = generate_response(user_id, user_message)
+    response = think(user_id, user_message)  # ✅ ON UTILISE think
 
     return jsonify({"response": response})
-
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
