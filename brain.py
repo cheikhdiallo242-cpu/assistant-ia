@@ -43,13 +43,13 @@ fr_freestyle = [
     "Je vis ce que je dis."
 ]
 
-def think(user, message):
-    msg = message.lower()
+if "conscient" in msg:
+    memory[user]["style"] = "conscient"
+    return generate_rap(user)
 
-    if user not in memory:
-        memory[user] = {
-            "lang": None,
-            "style": None
+if "freestyle" in msg or "encore" in msg:
+    memory[user]["style"] = "freestyle"
+    return generate_rap(user)
         }
 
     # Salutation
@@ -76,35 +76,7 @@ def think(user, message):
 
     return "Dis-moi : wolof ou français."
 
-def generate_response(history):
-    last_message = history[-1]["content"].lower()
 
-    if "rap" in last_message or "texte" in last_message:
-        return "🎤 Je peux t’aider à écrire un texte de rap. Dis-moi le thème."
-
-    if "bonjour" in last_message or "salut" in last_message:
-        return "Salut 👊 prêt à rapper ou à écrire ?"
-
-    if "wolof" in last_message:
-        return "D'accord. On continue en wolof 💪"
-
-    return "Parle-moi. Je t’écoute."
-    lang = memory[user]["lang"]
-    style = memory[user]["style"]
-
-    if lang == "wolof" and style == "conscient":
-        return random.choice(wolof_conscient)
-
-    if lang == "wolof" and style == "freestyle":
-        return random.choice(wolof_freestyle)
-
-    if lang == "fr" and style == "conscient":
-        return random.choice(fr_conscient)
-
-    if lang == "fr" and style == "freestyle":
-        return random.choice(fr_freestyle)
-
-    return "On continue. Encore ?"
     RAP_TEXTS = [
     "Je viens de loin, la rue m’a forgé",
     "Micro dans la main, vérité dans le cœur",
@@ -116,4 +88,21 @@ def generate_response(history):
     "J’écris pour survivre",
     "La nuit m’a appris à penser",
     "Je rappe pour ceux qu’on n’écoute pas"
+ def generate_rap(user):
+    lang = memory[user]["lang"]
+    style = memory[user]["style"]
+
+    if lang == "wolof" and style == "conscient":
+        return "\n".join(random.sample(wolof_conscient, 4))
+
+    if lang == "wolof" and style == "freestyle":
+        return "\n".join(random.sample(wolof_freestyle, 4))
+
+    if lang == "fr" and style == "conscient":
+        return "\n".join(random.sample(fr_conscient, 4))
+
+    if lang == "fr" and style == "freestyle":
+        return "\n".join(random.sample(fr_freestyle, 4))
+
+    return "Dis-moi : wolof ou français."
 ]
