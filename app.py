@@ -20,21 +20,6 @@ def chat():
 
     return jsonify({"response": response})
 
-    try:
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "system", "content": "Tu es un assistant GPT intelligent et utile."},
-                {"role": "user", "content": user_message}
-            ]
-        )
-
-        reply = response.choices[0].message.content
-        return jsonify({"reply": reply})
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
