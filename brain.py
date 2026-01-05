@@ -1,67 +1,61 @@
 import random
 
-# Mémoire simple (conversation)
-MEMORY = []
+# 🧠 Mémoire simple par utilisateur
+memory = {}
 
-# =========================
-# TEXTES RAP CONSCIENT WOLOF
-# =========================
-RAP_WOLOF_CONSCIENT = [
-    "Xel bu leer mooy doole gu dëgg, ku xam sa bopp du jaay sa xol.",
-    "Rap bi du mbubb, mooy xam-xam buy daw ci micro.",
-    "Nit ku gëm ay ndox, man dama gëm ay wax.",
-    "Street du safara, ignorance mooy safara.",
-    "Dëgg du metti, waaye déglu dëgg mooy liggéey.",
-    "Sama plume dafay jooy, waaye sama wax dafay faj.",
-    "Rap conscient du yëngal xel yi, du yëngal ego.",
-    "Ku dul xam fu mu joge, du xam fu mu dem.",
-    "Xol bu dëgër, xel bu leer, mooy sama armure.",
-    "Baat bi mooy arme, silence mooy poison.",
-    "Nit ñi di daw vérité, man dama koy top.",
-    "Rap du ay baat rekk, mooy responsabilité.",
-    "Ku am xel du ragal baat.",
-    "Dëgg mooy sama chemin, rap mooy sama guide.",
-    "Sama rap du néw, dafay réveiller.",
+# 🎤 BANQUE DE TEXTES RAP CONSCIENT (Wolof)
+RAP_CONSCIENT_WOLOF = [
+    "Xel bu leer, xol bu dëgër, dund gu am solo.",
+    "Dëgg la rap, du mbubb, du fén, du dolo.",
+    "Sama wax dafay daw, moo raw doole ak xaalis.",
+    "Ku am xel du jaay sa bopp, du jaay sa taalif.",
+    "Nopp naa aduna, gis naa fenkat yi bari.",
+    "Rap bi di yoon, di taalibe, di ndigël ci bari.",
+
+    "Nit ku xam sa bopp du topp mbubb mi.",
+    "Xel mu fees ak leer mooy arme bi gën.",
+    "Dund bi dafa metti waaye sax du war a dem.",
+    "Sama wax dafay jëme ci ndam, du jëme ci wem.",
+
+    "Rap conscient du mbëggeel rekk, mooy jangoro.",
+    "Wax dëgg mooy def xol yi am ndox.",
+    "Lu ñu bëgg a dégg du lu ñu war a wax.",
+    "Waaye rappeur bu dëgg du ragal benn wax."
 ]
 
-# =========================
-# FONCTION POUR FAIRE UN COUPLET
-# =========================
-def make_verse(lines=6):
-    lines = min(lines, len(RAP_WOLOF_CONSCIENT))
-    selected = random.sample(RAP_WOLOF_CONSCIENT, lines)
-    return "🎤 COUPLET :\n" + "\n".join(selected)
+# 🎤 RAP FRANÇAIS CONSCIENT
+RAP_FR = [
+    "J’écris pour réveiller les cerveaux endormis.",
+    "La vérité dérange, voilà pourquoi elle est bannie.",
+    "J’ai vu trop de rêves mourir dans le silence.",
+    "Alors je rappe pour donner un sens à l’existence."
+]
 
-# =========================
-# CERVEAU PRINCIPAL
-# =========================
-def generate_response(messages):
-    user_text = messages[-1]["content"].lower()
-    MEMORY.append(user_text)
+def generate_response(user_id, message):
+    msg = message.lower()
 
-    # Salutations
-    if "salut" in user_text or "slt" in user_text or "bonjour" in user_text:
-        return "👋 Salut Cheikh. Tu veux du rap conscient, freestyle ou wolof pur ?"
+    # Initialiser mémoire utilisateur
+    if user_id not in memory:
+        memory[user_id] = {
+            "langue": "wolof",
+            "style": "conscient"
+        }
 
-    # Rap conscient wolof
-    if "conscient" in user_text and "wolof" in user_text:
-        return make_verse(6)
+    # Détection langue / style
+    if "wolof" in msg:
+        memory[user_id]["langue"] = "wolof"
+    if "français" in msg or "francais" in msg:
+        memory[user_id]["langue"] = "fr"
+    if "conscient" in msg:
+        memory[user_id]["style"] = "conscient"
 
-    # Rap conscient
-    if "conscient" in user_text:
-        return make_verse(5)
+    # 🎯 GÉNÉRATION MULTI-PHRASES
+    lines = []
 
-    # Freestyle
-    if "freestyle" in user_text:
-        return make_verse(7)
+    if memory[user_id]["langue"] == "wolof":
+        lines = random.sample(RAP_CONSCIENT_WOLOF, 5)
+    else:
+        lines = random.sample(RAP_FR, 4)
 
-    # Rap général
-    if "rap" in user_text:
-        return "🎤 Dis-moi : conscient, freestyle ou wolof."
-
-    # Mémoire (illusion d’intelligence)
-    if len(MEMORY) >= 4:
-        return "🧠 Je te suis. Continue, ton message est clair."
-
-    # Réponse par défaut
-    return "🤔 Reformule un peu. Je suis là pour créer avec toi."
+    # 🔥 IMPORTANT : joindre les lignes
+    return "\n".join(lines)
