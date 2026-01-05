@@ -1,108 +1,67 @@
-PERSONALITY = """
-Tu es une assistante IA spécialisée dans le rap.
-Tu aides à écrire des textes de rap.
-Tu encourages la créativité.
-Tu parles simplement, parfois street.
-Tu peux aider en wolof, français ou mélange.
-Tu te souviens toujours de l'utilisateur.
-"""
 import random
 
-# Mémoire simple (par utilisateur)
-memory = {}
+# Mémoire simple (conversation)
+MEMORY = []
 
-wolof_conscient = [
-    "Dëgg laa wax, du lekk sama xel.",
-    "Ku muñ, Yàlla jox ko bopp.",
-    "Sama wax dañuy joge ci xol bu rëy.",
-    "Rap du mbëggeel, rap mooy dund.",
-    "Dëgg du metti, lu metti mooy fen."
+# =========================
+# TEXTES RAP CONSCIENT WOLOF
+# =========================
+RAP_WOLOF_CONSCIENT = [
+    "Xel bu leer mooy doole gu dëgg, ku xam sa bopp du jaay sa xol.",
+    "Rap bi du mbubb, mooy xam-xam buy daw ci micro.",
+    "Nit ku gëm ay ndox, man dama gëm ay wax.",
+    "Street du safara, ignorance mooy safara.",
+    "Dëgg du metti, waaye déglu dëgg mooy liggéey.",
+    "Sama plume dafay jooy, waaye sama wax dafay faj.",
+    "Rap conscient du yëngal xel yi, du yëngal ego.",
+    "Ku dul xam fu mu joge, du xam fu mu dem.",
+    "Xol bu dëgër, xel bu leer, mooy sama armure.",
+    "Baat bi mooy arme, silence mooy poison.",
+    "Nit ñi di daw vérité, man dama koy top.",
+    "Rap du ay baat rekk, mooy responsabilité.",
+    "Ku am xel du ragal baat.",
+    "Dëgg mooy sama chemin, rap mooy sama guide.",
+    "Sama rap du néw, dafay réveiller.",
 ]
 
-wolof_freestyle = [
-    "Dëgg laa wax, flow bi dafay ñuul.",
-    "Sama baat dafay daw ci beat bi.",
-    "Maay wax ci mic, xol bi lay guide.",
-    "Rap wolof mooy sama identité.",
-    "Ma nekk fii, doomu Dakar."
-]
+# =========================
+# FONCTION POUR FAIRE UN COUPLET
+# =========================
+def make_verse(lines=6):
+    lines = min(lines, len(RAP_WOLOF_CONSCIENT))
+    selected = random.sample(RAP_WOLOF_CONSCIENT, lines)
+    return "🎤 COUPLET :\n" + "\n".join(selected)
 
-fr_conscient = [
-    "Je rappe la vérité sans filtre.",
-    "Chaque mot porte du vécu.",
-    "La rue m’a appris sans école.",
-    "Je reste debout malgré la tempête.",
-    "La plume est mon refuge."
-]
+# =========================
+# CERVEAU PRINCIPAL
+# =========================
+def generate_response(messages):
+    user_text = messages[-1]["content"].lower()
+    MEMORY.append(user_text)
 
-fr_freestyle = [
-    "Je freestyle sans calcul.",
-    "Le micro devient mon allié.",
-    "Je parle vrai, pas pour plaire.",
-    "Chaque phrase est un souffle.",
-    "Je vis ce que je dis."
-]
+    # Salutations
+    if "salut" in user_text or "slt" in user_text or "bonjour" in user_text:
+        return "👋 Salut Cheikh. Tu veux du rap conscient, freestyle ou wolof pur ?"
 
-if "conscient" in msg:
-    memory[user]["style"] = "conscient"
-    return generate_rap(user)
+    # Rap conscient wolof
+    if "conscient" in user_text and "wolof" in user_text:
+        return make_verse(6)
 
-if "freestyle" in msg or "encore" in msg:
-    memory[user]["style"] = "freestyle"
-    return generate_rap(user)
-        }
+    # Rap conscient
+    if "conscient" in user_text:
+        return make_verse(5)
 
-    # Salutation
-    if "salut" in msg or "bonjour" in msg:
-        return "👋 Salut Cheikh chérie sandu. Tu veux du rap en wolof ou en français ?"
+    # Freestyle
+    if "freestyle" in user_text:
+        return make_verse(7)
 
-    # Langue
-    if "wolof" in msg:
-        memory[user]["lang"] = "wolof"
-        return "🗣️ Wolof noté. Conscient ou freestyle ?"
+    # Rap général
+    if "rap" in user_text:
+        return "🎤 Dis-moi : conscient, freestyle ou wolof."
 
-    if "français" in msg or "francais" in msg:
-        memory[user]["lang"] = "fr"
-        return "🇫🇷 Français noté. Conscient ou freestyle ?"
+    # Mémoire (illusion d’intelligence)
+    if len(MEMORY) >= 4:
+        return "🧠 Je te suis. Continue, ton message est clair."
 
-    # Style
-    if "conscient" in msg:
-        memory[user]["style"] = "conscient"
-        return generate_rap(user)
-
-    if "freestyle" in msg or "encore" in msg:
-        memory[user]["style"] = "freestyle"
-        return generate_rap(user)
-
-    return "Dis-moi : wolof ou français."
-
-
-    RAP_TEXTS = [
-    "Je viens de loin, la rue m’a forgé",
-    "Micro dans la main, vérité dans le cœur",
-    "Ils parlent trop, moi j’écris",
-    "Chaque ligne est une cicatrice",
-    "J’ai connu la faim avant la gloire",
-    "Ma voix est une arme pacifique",
-    "Le rap c’est pas du bruit, c’est un message",
-    "J’écris pour survivre",
-    "La nuit m’a appris à penser",
-    "Je rappe pour ceux qu’on n’écoute pas"
- def generate_rap(user):
-    lang = memory[user]["lang"]
-    style = memory[user]["style"]
-
-    if lang == "wolof" and style == "conscient":
-        return "\n".join(random.sample(wolof_conscient, 4))
-
-    if lang == "wolof" and style == "freestyle":
-        return "\n".join(random.sample(wolof_freestyle, 4))
-
-    if lang == "fr" and style == "conscient":
-        return "\n".join(random.sample(fr_conscient, 4))
-
-    if lang == "fr" and style == "freestyle":
-        return "\n".join(random.sample(fr_freestyle, 4))
-
-    return "Dis-moi : wolof ou français."
-]
+    # Réponse par défaut
+    return "🤔 Reformule un peu. Je suis là pour créer avec toi."
