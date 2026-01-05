@@ -1,61 +1,93 @@
-import random
+# brain.py
 
-# 🧠 Mémoire simple par utilisateur
+# Mémoire simple par utilisateur
 memory = {}
 
-# 🎤 BANQUE DE TEXTES RAP CONSCIENT (Wolof)
-RAP_CONSCIENT_WOLOF = [
-    "Xel bu leer, xol bu dëgër, dund gu am solo.",
-    "Dëgg la rap, du mbubb, du fén, du dolo.",
-    "Sama wax dafay daw, moo raw doole ak xaalis.",
-    "Ku am xel du jaay sa bopp, du jaay sa taalif.",
-    "Nopp naa aduna, gis naa fenkat yi bari.",
-    "Rap bi di yoon, di taalibe, di ndigël ci bari.",
+def think(user_id, message):
+    text = message.lower().strip()
 
-    "Nit ku xam sa bopp du topp mbubb mi.",
-    "Xel mu fees ak leer mooy arme bi gën.",
-    "Dund bi dafa metti waaye sax du war a dem.",
-    "Sama wax dafay jëme ci ndam, du jëme ci wem.",
-
-    "Rap conscient du mbëggeel rekk, mooy jangoro.",
-    "Wax dëgg mooy def xol yi am ndox.",
-    "Lu ñu bëgg a dégg du lu ñu war a wax.",
-    "Waaye rappeur bu dëgg du ragal benn wax."
-]
-
-# 🎤 RAP FRANÇAIS CONSCIENT
-RAP_FR = [
-    "J’écris pour réveiller les cerveaux endormis.",
-    "La vérité dérange, voilà pourquoi elle est bannie.",
-    "J’ai vu trop de rêves mourir dans le silence.",
-    "Alors je rappe pour donner un sens à l’existence."
-]
-
-def generate_response(user_id, message):
-    msg = message.lower()
-
-    # Initialiser mémoire utilisateur
+    # Initialiser la mémoire utilisateur
     if user_id not in memory:
         memory[user_id] = {
-            "langue": "wolof",
-            "style": "conscient"
+            "lang": None,
+            "mode": None
         }
 
-    # Détection langue / style
-    if "wolof" in msg:
-        memory[user_id]["langue"] = "wolof"
-    if "français" in msg or "francais" in msg:
-        memory[user_id]["langue"] = "fr"
-    if "conscient" in msg:
-        memory[user_id]["style"] = "conscient"
+    user = memory[user_id]
 
-    # 🎯 GÉNÉRATION MULTI-PHRASES
-    lines = []
+    # ===== SALUT / BONJOUR =====
+    if any(word in text for word in ["salut", "bonjour", "slt", "hello", "hi"]):
+        return (
+            "👋 Salut Cheikh.\n"
+            "Je suis ton assistant IA personnel.\n"
+            "Tu veux du rap, du freestyle, ou une discussion consciente ?"
+        )
 
-    if memory[user_id]["langue"] == "wolof":
-        lines = random.sample(RAP_CONSCIENT_WOLOF, 5)
-    else:
-        lines = random.sample(RAP_FR, 4)
+    # ===== QUI T'A CRÉÉ =====
+    if "qui t'a créé" in text or "qui ta créé" in text or "qui es tu" in text:
+        return (
+            "🤖 J’ai été créé par Cheikh.\n"
+            "Un esprit créatif qui aime le rap conscient,\n"
+            "le wolof, la vérité et la réflexion.\n"
+            "Je suis là pour l’aider à s’exprimer."
+        )
 
-    # 🔥 IMPORTANT : joindre les lignes
-    return "\n".join(lines)
+    # ===== LANGUE =====
+    if "wolof" in text:
+        user["lang"] = "wolof"
+        return "🗣️ Wolof noté. Tu veux du rap conscient ou du freestyle ?"
+
+    if "français" in text or "francais" in text:
+        user["lang"] = "fr"
+        return "🇫🇷 Français noté. Rap conscient ou freestyle ?"
+
+    # ===== MODE =====
+    if "conscient" in text:
+        user["mode"] = "conscient"
+        return generate_rap(user["lang"], "conscient")
+
+    if "freestyle" in text:
+        user["mode"] = "freestyle"
+        return generate_rap(user["lang"], "freestyle")
+
+    # ===== PAR DÉFAUT =====
+    return (
+        "🤔 Je n’ai pas bien compris.\n"
+        "Dis par exemple : wolof, français, conscient ou freestyle."
+    )
+
+
+def generate_rap(lang, mode):
+    if lang == "wolof" and mode == "conscient":
+        return (
+            "🎤 Xel bu leer, xol bu dëgër, dund gu am solo.\n"
+            "Nit ku xam sa bopp du topp mbubb mi.\n"
+            "Aduna du ay xaalis rekk, mooy ay jikko.\n"
+            "Rap bi sama jamono, wax ju dëgg laay yónni.\n"
+            "Dund bi metti, waaye sax dama taxaw."
+        )
+
+    if lang == "wolof" and mode == "freestyle":
+        return (
+            "🔥 Wax ma dal, sama flow dafa raw.\n"
+            "Mic bi ci sama loxo, sama xel dafay daw.\n"
+            "Street bi sama école, dund bi sama beat.\n"
+            "Freestyle bu am doole, bu dul fen."
+        )
+
+    if lang == "fr" and mode == "conscient":
+        return (
+            "🎤 J’écris pour comprendre, pas pour briller.\n"
+            "Le rap c’est la vérité quand le monde ment.\n"
+            "Chaque mot est un pas vers la lumière.\n"
+            "Je rappe pour ceux qu’on n’écoute jamais."
+        )
+
+    if lang == "fr" and mode == "freestyle":
+        return (
+            "🔥 Freestyle en feu, j’improvise sans filet.\n"
+            "Les mots coulent comme la nuit sur la ville.\n"
+            "Pas besoin de refrain quand le flow parle."
+        )
+
+    return "🤖 Choisis une langue et un style."
