@@ -13,16 +13,29 @@ INTRO_WOLOF = [
     "Sama wax mooy dund",
 ]
 
-LINES_WOLOF = [
-    "Nit ku xam sa bopp du topp mbubb mi",
-    "Ku muñ moo gën a dox",
-    "Dëgg du am xarit waaye mooy ndam",
-    "Xel bu rafet mooy alal bu gëna rëy",
-    "Sama baat dafay taxaw, du daw",
-    "Yoon wi gudd na waaye ndam neex na",
-    "Rap conscient du mbëggeel ak fitna",
-    "Ku ragal Yàlla du ñakk yoon",
-]
+THEMES = {
+    "rue": [
+        "Rue bi dafa jàngal, du école",
+        "Ku am doole ci rue am xel",
+        "Bitim-réew du yomb waaye moo may doole",
+        "Rue bi mooy sama livre bu jëkk",
+        "Ci trottoir la ma jàng dund",
+    ],
+    "foi": [
+        "Ku ragal Yàlla du ñakk yoon",
+        "Ñaan mooy sama arme",
+        "Dëgg ak muus mooy sama guide",
+        "Yàlla rekk mooy sama soutien",
+        "Xol bu leer di wut ndimbal",
+    ],
+    "amour": [
+        "Mbëggeel du ay wax rekk",
+        "Xol bu gën a metti mooy bu bëgg",
+        "Amour dafay may doole ak metit",
+        "Ku bëgg dëgg, bëgg metit",
+        "Mbëggeel mooy jangoro bu neex",
+    ],
+}
 
 REFRAIN_WOLOF = [
     "🎶 Xel bu leer, xol bu dëgër",
@@ -30,18 +43,22 @@ REFRAIN_WOLOF = [
 ]
 
 def generate_rap(theme=None):
-    verse1 = random.sample(LINES_WOLOF, 5)
-    verse2 = random.sample(LINES_WOLOF, 5)
+    if theme and theme.lower() in THEMES:
+        base_lines = THEMES[theme.lower()]
+    else:
+        base_lines = LINES_WOLOF
+
+    couplet1 = random.sample(base_lines, min(5, len(base_lines)))
+    couplet2 = random.sample(base_lines, min(5, len(base_lines)))
     refrain = random.sample(REFRAIN_WOLOF, 2)
 
-    theme_line = f"🎯 Thème : {theme}\n\n" if theme else ""
-
     return (
-        f"🎤 {random.choice(INTRO_WOLOF)}\n\n"
-        + theme_line
-        + "\n".join(verse1) + "\n\n"
-        + "\n".join(refrain) + "\n\n"
-        + "\n".join(verse2)
+        f"🎤 {random.choice(INTRO_WOLOF)}\n"
+        f"🎯 Thème : {theme}\n\n"
+        + "\n".join(couplet1)
+        + "\n\n🎶 " + " / ".join(refrain) + " 🎶\n\n"
+        + "\n".join(couplet2)
+        + "\n\n🎶 " + " / ".join(refrain) + " 🎶"
     )
 
 def think(user_id, message):
