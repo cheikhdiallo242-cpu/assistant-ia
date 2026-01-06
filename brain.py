@@ -84,8 +84,16 @@ THEMES = {
 # GÉNÉRATION
 # =========================
 
+import random
+
 def make_lines(lines, n):
-    return "\n".join(random.choices(lines, k=n))
+    unique_lines = list(dict.fromkeys(lines))  # enlève doublons
+    random.shuffle(unique_lines)
+
+    if len(unique_lines) < n:
+        unique_lines = unique_lines * (n // len(unique_lines) + 1)
+
+    return "\n".join(unique_lines[:n])
 
 def make_refrain(lang):
     if lang == "wolof":
@@ -93,23 +101,27 @@ def make_refrain(lang):
     return make_lines(REFRAIN_FR, 8)
 
 def rap_theme(lang, theme):
-    base = THEMES.get(theme, {}).get(lang)
-    if not base:
-        base = WOLOF_LINES if lang == "wolof" else FRENCH_LINES
+    lines = WOLOF_LINES if lang == "wolof" else FRENCH_LINES
+
+    couplet1 = make_lines(lines, 16)
+    refrain = make_lines(lines, 8)
+    couplet2 = make_lines(lines, 16)
 
     return (
-        f"🎤 THÈME : {theme.upper()}\n\n"
-        f"{make_lines(base, 16)}\n\n"
-        f"🎶\n{make_refrain(lang)}\n🎶\n\n"
-        f"{make_lines(base, 16)}\n\n"
-        f"🎶\n{make_refrain(lang)}\n🎶"
+        f"🎯 THÈME : {theme.upper()}\n\n"
+        f"🟦 COUPLET 1\n{couplet1}\n\n"
+        f"🎶 REFRAIN\n{refrain}\n\n"
+        f"🟦 COUPLET 2\n{couplet2}\n\n"
+        f"🎶 REFRAIN\n{refrain}"
     )
 
 def rap_freestyle(lang):
-    base = WOLOF_LINES if lang == "wolof" else FRENCH_LINES
+    lines = WOLOF_LINES if lang == "wolof" else FRENCH_LINES
+
     return (
         "🎤 FREESTYLE\n\n"
-        f"{make_lines(base, 16)}"
+        + make_lines(lines, 16)
+        + "\n\n— freestyle libre, pas de refrain —"
     )
 
 # =========================
