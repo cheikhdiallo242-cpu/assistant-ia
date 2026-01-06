@@ -1,93 +1,117 @@
-# brain.py
+import random
 
-# Mémoire simple par utilisateur
 memory = {}
 
-def think(user_id, message):
-    text = message.lower().strip()
+# ====== BANQUES DE PHRASES ======
 
-    # Initialiser la mémoire utilisateur
+INTRO_WOLOF = [
+    "Xel bu leer, xol bu dëgër",
+    "Dund bi dafa metti waaye jàng la",
+    "Sama wax du ay fenn",
+    "Rap du poésii rekk, mooy dund",
+]
+
+LINES_WOLOF = [
+    "Nit ku xam sa bopp du topp mbubb mi",
+    "Ku muñ moo gën a dox",
+    "Dëgg du am xarit waaye mooy ndam",
+    "Xel bu rafet mooy alal bu gëna rëy",
+    "Sama baat dafay taxaw, du daw",
+    "Yoon wi gudd na waaye ndam neex na",
+    "Rap conscient du mbëggeel ak fitna",
+    "Ku ragal Yàlla du ñakk yoon",
+]
+
+REFRAIN_WOLOF = [
+    "🎶 Xel bu leer, xol bu dëgër",
+    "🎶 Rap bi mooy sama liggéey",
+    "🎶 Dëgg laay wax, du ma fenn",
+]
+
+INTRO_FR = [
+    "J’écris pour les miens",
+    "La rue m’a tout appris",
+    "Ce rap vient du cœur",
+]
+
+LINES_FR = [
+    "La vérité dérange mais elle libère",
+    "J’avance seul mais droit",
+    "Le succès sans valeurs ne vaut rien",
+    "Chaque cicatrice raconte une histoire",
+    "Je rappe pour survivre pas pour plaire",
+]
+
+REFRAIN_FR = [
+    "🎶 Rap conscient, parole sincère",
+    "🎶 Même dans l’ombre je reste clair",
+]
+
+SALUTATIONS = ["salut", "bonjour", "slt", "hello", "salam"]
+
+# ====== GÉNÉRATION ======
+
+def generate_verse(lines, n=5):
+    return random.sample(lines, n)
+
+def generate_rap(language):
+    if language == "wolof":
+        verse1 = generate_verse(LINES_WOLOF, 5)
+        refrain = random.sample(REFRAIN_WOLOF, 2)
+        verse2 = generate_verse(LINES_WOLOF, 5)
+
+        return (
+            "🎤 " + random.choice(INTRO_WOLOF) + "\n\n"
+            + "\n".join(verse1) + "\n\n"
+            + "\n".join(refrain) + "\n\n"
+            + "\n".join(verse2)
+        )
+
+    if language == "fr":
+        verse1 = generate_verse(LINES_FR, 5)
+        refrain = random.sample(REFRAIN_FR, 2)
+        verse2 = generate_verse(LINES_FR, 5)
+
+        return (
+            "🎤 " + random.choice(INTRO_FR) + "\n\n"
+            + "\n".join(verse1) + "\n\n"
+            + "\n".join(refrain) + "\n\n"
+            + "\n".join(verse2)
+        )
+
+    return "Choisis une langue."
+
+# ====== CERVEAU ======
+
+def think(user_id, message):
+    msg = message.lower().strip()
+
     if user_id not in memory:
         memory[user_id] = {
-            "lang": None,
-            "mode": None
+            "language": None
         }
 
-    user = memory[user_id]
+    if any(w in msg for w in SALUTATIONS):
+        return "👋 Salut Cheikh. Wolof ou Français ?"
 
-    # ===== SALUT / BONJOUR =====
-    if any(word in text for word in ["salut", "bonjour", "slt", "hello", "hi"]):
-        return (
-            "👋 Salut Cheikh.\n"
-            "Je suis ton assistant IA personnel.\n"
-            "Tu veux du rap, du freestyle, ou une discussion consciente ?"
-        )
+    if "qui t'a créé" in msg or "qui t’a créé" in msg:
+        return "🤖 J’ai été créé par Cheikh Diallo pour le rap conscient."
 
-    # ===== QUI T'A CRÉÉ =====
-    if "qui t'a créé" in text or "qui ta créé" in text or "qui es tu" in text:
-        return (
-            "🤖 J’ai été créé par Cheikh.\n"
-            "Un esprit créatif qui aime le rap conscient,\n"
-            "le wolof, la vérité et la réflexion.\n"
-            "Je suis là pour l’aider à s’exprimer."
-        )
+    if "wolof" in msg:
+        memory[user_id]["language"] = "wolof"
+        return "🗣️ Wolof activé. Dis *conscient* ou écris un thème."
 
-    # ===== LANGUE =====
-    if "wolof" in text:
-        user["lang"] = "wolof"
-        return "🗣️ Wolof noté. Tu veux du rap conscient ou du freestyle ?"
+    if "français" in msg or "francais" in msg:
+        memory[user_id]["language"] = "fr"
+        return "🇫🇷 Français activé. Dis *conscient* ou écris un thème."
 
-    if "français" in text or "francais" in text:
-        user["lang"] = "fr"
-        return "🇫🇷 Français noté. Rap conscient ou freestyle ?"
+    if msg in ["encore", "autre", "continue"]:
+        return generate_rap(memory[user_id]["language"])
 
-    # ===== MODE =====
-    if "conscient" in text:
-        user["mode"] = "conscient"
-        return generate_rap(user["lang"], "conscient")
+    if len(msg.split()) > 6:
+        return generate_rap(memory[user_id]["language"])
 
-    if "freestyle" in text:
-        user["mode"] = "freestyle"
-        return generate_rap(user["lang"], "freestyle")
+    if "conscient" in msg:
+        return generate_rap(memory[user_id]["language"])
 
-    # ===== PAR DÉFAUT =====
-    return (
-        "🤔 Je n’ai pas bien compris.\n"
-        "Dis par exemple : wolof, français, conscient ou freestyle."
-    )
-
-
-def generate_rap(lang, mode):
-    if lang == "wolof" and mode == "conscient":
-        return (
-            "🎤 Xel bu leer, xol bu dëgër, dund gu am solo.\n"
-            "Nit ku xam sa bopp du topp mbubb mi.\n"
-            "Aduna du ay xaalis rekk, mooy ay jikko.\n"
-            "Rap bi sama jamono, wax ju dëgg laay yónni.\n"
-            "Dund bi metti, waaye sax dama taxaw."
-        )
-
-    if lang == "wolof" and mode == "freestyle":
-        return (
-            "🔥 Wax ma dal, sama flow dafa raw.\n"
-            "Mic bi ci sama loxo, sama xel dafay daw.\n"
-            "Street bi sama école, dund bi sama beat.\n"
-            "Freestyle bu am doole, bu dul fen."
-        )
-
-    if lang == "fr" and mode == "conscient":
-        return (
-            "🎤 J’écris pour comprendre, pas pour briller.\n"
-            "Le rap c’est la vérité quand le monde ment.\n"
-            "Chaque mot est un pas vers la lumière.\n"
-            "Je rappe pour ceux qu’on n’écoute jamais."
-        )
-
-    if lang == "fr" and mode == "freestyle":
-        return (
-            "🔥 Freestyle en feu, j’improvise sans filet.\n"
-            "Les mots coulent comme la nuit sur la ville.\n"
-            "Pas besoin de refrain quand le flow parle."
-        )
-
-    return "🤖 Choisis une langue et un style."
+    return "🎤 Dis *encore*, *autre*, ou écris un thème."
